@@ -33,6 +33,65 @@
       radial-gradient(circle at 80% 80%, rgba(200,168,75,0.03) 0%, transparent 50%);
   }
 
+
+/* PHOTO STRIP */
+  .photo-strip-section {
+    width: 100%; overflow: hidden;
+    padding: 48px 0;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .photo-strip-label {
+    font-family: var(--mono); font-size: 0.58rem;
+    letter-spacing: 0.3em; color: var(--muted);
+    text-transform: uppercase; text-align: center;
+    margin-bottom: 28px;
+  }
+  .photo-strip-track {
+    display: flex; gap: 20px;
+    width: max-content;
+    animation: stripScroll 28s linear infinite;
+  }
+  .photo-strip-track:hover { animation-play-state: paused; }
+  @keyframes stripScroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .photo-strip-item {
+    flex-shrink: 0;
+    width: 220px; height: 290px;
+    border-radius: 6px; overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+  }
+  .photo-strip-item:nth-child(odd)  { transform: rotate(-2deg); }
+  .photo-strip-item:nth-child(even) { transform: rotate(1.5deg); margin-top: 18px; }
+  .photo-strip-item:hover { transform: rotate(0deg) scale(1.04) !important; box-shadow: 0 18px 48px rgba(0,0,0,0.18); z-index: 10; }
+  .photo-strip-item img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    transition: transform 0.4s;
+  }
+  .photo-strip-item:hover img { transform: scale(1.06); }
+  /* Fade edges */
+  .photo-strip-section::before,
+  .photo-strip-section::after {
+    content: '';
+    position: absolute; top: 0; bottom: 0;
+    width: 120px; z-index: 5; pointer-events: none;
+  }
+  .photo-strip-section::before { left: 0; background: linear-gradient(to right, var(--bg2), transparent); }
+  .photo-strip-section::after  { right: 0; background: linear-gradient(to left,  var(--bg2), transparent); }
+ 
+
+
+
+
+
   /* Noise texture overlay */
   body::before {
     content: '';
@@ -179,8 +238,13 @@
     font-family: var(--serif);
     font-size: clamp(1.8rem, 3.5vw, 2.8rem);
     font-weight: 700; line-height: 1.1;
-    margin-bottom: 18px; color: var(--text);
+    margin-bottom: 8px; color: var(--text);
     letter-spacing: -0.02em;
+  }
+  .hero-about{
+font-size: 0.83rem; line-height: 1.85;
+    color: var(--muted); max-width: 4500px;
+    margin-bottom: 14px; font-weight: 50;
   }
   .hero-role-line {
     font-family: var(--mono); font-size: 0.72rem;
@@ -190,7 +254,7 @@
   .typed-text { color: var(--accent); font-weight: 500; }
   .hero-desc {
     font-size: 0.93rem; line-height: 1.85;
-    color: var(--muted); max-width: 520px;
+    color: var(--muted); max-width: 4500px;
     margin-bottom: 34px; font-weight: 300;
   }
   .hero-desc strong { color: var(--text); font-weight: 500; }
@@ -329,6 +393,52 @@
     font-style: italic; color: var(--text); margin-bottom: 32px;
   }
   .chart-wrapper { display: flex; align-items: flex-start; gap: 56px; flex-wrap: wrap; }
+.donut-container { position: relative; flex-shrink: 0; width: 340px; height: 340px; }
+
+.donut {
+  width: 100%; height: 100%;
+  transform-origin: center;
+}
+@keyframes donutSpinIn {
+  from { transform: rotate(-270deg) scale(0.7); opacity: 0; }
+  to   { transform: rotate(-90deg)  scale(1);   opacity: 1; }
+}
+@keyframes donutIdleSpin {
+  from { transform: rotate(-90deg); }
+  to   { transform: rotate(270deg); }
+}
+.donut.spin-in {
+  animation: donutSpinIn 1.4s cubic-bezier(0.23,1,0.32,1) forwards,
+             donutIdleSpin 32s linear 1.5s infinite;
+}
+.donut-container:hover .donut { animation-play-state: paused; }
+
+.segment { cursor: pointer; transition: filter 0.25s, transform 0.25s; transform-origin: 180px 180px; }
+.segment:hover { filter: brightness(1.18) drop-shadow(0 0 8px rgba(200,168,75,0.45)); transform: scale(1.06); }
+
+.donut-center {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  text-align: center; pointer-events: none;
+}
+.donut-center::before {
+  content: '';
+  position: absolute; top: 50%; left: 50%;
+  width: 96px; height: 96px;
+  transform: translate(-50%,-50%);
+  border-radius: 50%;
+  border: 1.5px solid rgba(200,168,75,0.4);
+  animation: centerPulse 2.8s ease-in-out infinite;
+}
+@keyframes centerPulse {
+  0%, 100% { transform: translate(-50%,-50%) scale(1);    opacity: 0.7; }
+  50%       { transform: translate(-50%,-50%) scale(1.22); opacity: 0; }
+}
+.donut-center-text { font-family: var(--serif); font-size: 0.95rem; font-style: italic; color: var(--text); line-height: 1.4; }
+.donut-center-sub { font-family: var(--mono); font-size: 0.55rem; color: var(--muted); letter-spacing: 0.12em; margin-top: 5px; }
+
+
+  /*.chart-wrapper { display: flex; align-items: flex-start; gap: 56px; flex-wrap: wrap; }
   .donut-container { position: relative; flex-shrink: 0; width: 340px; height: 340px; }
   .donut { width: 100%; height: 100%; }
   .segment { cursor: pointer; transition: filter 0.2s, transform 0.2s; transform-origin: 180px 180px; }
@@ -342,7 +452,7 @@
     letter-spacing: 0.22em; text-transform: uppercase;
     margin-bottom: 10px; display: inline-block;
     padding: 3px 10px; border-radius: 2px;
-  }
+  }*/
   .ring-title.work { color: var(--text); background: rgba(26,23,20,0.07); }
   .ring-title.personal { color: var(--accent); background: rgba(200,168,75,0.1); }
   .legend-items { display: flex; flex-direction: column; gap: 6px; }
@@ -359,6 +469,15 @@
   .divider-line { height: 1px; background: var(--border); margin: 4px 0; }
   .tooltip-chart { position: fixed; pointer-events: none; background: var(--text); color: var(--bg); font-size: 0.76rem; line-height: 1.55; padding: 9px 13px; border-radius: 4px; box-shadow: 0 6px 24px rgba(0,0,0,0.2); z-index: 999; opacity: 0; transition: opacity 0.15s; max-width: 200px; font-family: var(--sans); }
 
+  .chart-description {
+  
+  font-family: var(--serif); font-size: 1.05rem; font-style: italic;
+  color: var(--muted);
+  line-height: 1.8;
+  font-weight: 300;
+  max-width: 300px;
+  margin-bottom: 20px;
+}
   .about-quote {
     font-family: var(--serif); font-size: 1.05rem; font-style: italic;
     color: var(--muted); margin-top: 48px; padding: 22px 0;
@@ -403,7 +522,7 @@
   }
   .timeline-item:last-child::after { display: none; }
   .timeline-dot {
-    position: absolute; left: 153px; top: 8px;
+    position: absolute; left: 159px; top: 8px;
     width: 13px; height: 13px; border-radius: 50%;
     background: var(--bg); border: 2px solid var(--accent);
     z-index: 1;
@@ -603,12 +722,13 @@
       <div class="hero-text-col">
         <div class="hero-greeting">Hello, I'm</div>
         <h1 class="hero-name">Jinni Girhotra</h1>
+        <p class="hero-about">born and raised in India, now based in Gothenburg,&nbsp;Sweden, with plans to relocate to the Netherlands.</p>
         <p class="hero-role-line">Open to work as a <span class="typed-text" id="typed"></span><span style="color:var(--accent);">|</span></p>
         <p class="hero-desc">
-          To me, Analytics isn't about reports for the sake of reporting. It’s about understanding the story 
+          To me,&nbsp; Analytics isn't about reports for the sake of reporting. It’s about understanding the story 
           behind the numbers and aligning insights with business strategy. I enjoy breaking down complex problems,
-          challenging assumptions, and finding opportunities hidden within data.From forecasting trends to improving operational
-          efficiency, I aim to make data practical, understandable, and impactful for stakeholders at every level.
+          challenging assumptions, and finding opportunities hidden within data. From forecasting trends to improving operational
+          efficiency, &nbsp;I aim to make data practical,&nbsp; understandable, &nbsp;and impactful for stakeholders at every level.
 
         </p>
         <div class="hero-cta">
@@ -624,8 +744,40 @@
   </div>
 </section>
 
+
+<!-- PHOTO STRIP -->
+ <div class="photo-strip-section" id="about">
+  <div class="photo-strip-label" >// A glimpse into my world</div>
+  <div class="photo-strip-track" id="photoStrip">
+    <!-- === ADD YOUR PHOTOS HERE: replace the src="" with your image filenames === -->
+    <div class="photo-strip-item"><img src="hike.jpg" alt="Photo 1" onerror="this.closest('.photo-strip-item').style.background='linear-gradient(135deg,#c8a84b22,#e8e4de)';this.style.display='none'"/></div>
+    <div class="photo-strip-item"><img src="draw2.jpg" alt="Photo 1" onerror="this.closest('.photo-strip-item').style.background='linear-gradient(135deg,#c8a84b22,#e8e4de)';this.style.display='none'"/></div>
+
+    <div class="photo-strip-item"><img src="swim.jpg" alt="Photo 2" onerror="this.closest('.photo-strip-item').style.background='linear-gradient(135deg,#3d302822,#e8e4de)';this.style.display='none'"/></div>
+    <div class="photo-strip-item"><img src="dance1.jpg" alt="Photo 3" onerror="this.closest('.photo-strip-item').style.background='linear-gradient(135deg,#c8a84b33,#d4c9be)';this.style.display='none'"/></div>
+    <div class="photo-strip-item"><img src="dance3.jpg" alt="Photo 3" onerror="this.closest('.photo-strip-item').style.background='linear-gradient(135deg,#c8a84b33,#d4c9be)';this.style.display='none'"/></div>
+    <div class="photo-strip-item"><img src="draw.jpg" alt="Photo 4" onerror="this.closest('.photo-strip-item').style.background='linear-gradient(135deg,#5a453522,#e8e4de)';this.style.display='none'"/></div>
+    <div class="photo-strip-item"><img src="dance2.jpg" alt="Photo 3" onerror="this.closest('.photo-strip-item').style.background='linear-gradient(135deg,#c8a84b33,#d4c9be)';this.style.display='none'"/></div>
+    <div class="photo-strip-item"><img src="garba.jpg" alt="Photo 5" onerror="this.closest('.photo-strip-item').style.background='linear-gradient(135deg,#c8a84b44,#faf8f5)';this.style.display='none'"/></div>
+    <div class="photo-strip-item"><img src="food.jpg" alt="Photo 6" onerror="this.closest('.photo-strip-item').style.background='linear-gradient(135deg,#b89828,#e8e4de)';this.style.opacity='0.4';this.style.display='none'"/></div>
+    <!-- DUPLICATED SET for seamless infinite loop -->
+    <div class="photo-strip-item"><img src="hike.jpg" alt="Photo 1" onerror="this.closest('.photo-strip-item').style.background='linear-gradient(135deg,#c8a84b22,#e8e4de)';this.style.display='none'"/></div>
+    <div class="photo-strip-item"><img src="draw2.jpg" alt="Photo 1" onerror="this.closest('.photo-strip-item').style.background='linear-gradient(135deg,#c8a84b22,#e8e4de)';this.style.display='none'"/></div>
+
+    <div class="photo-strip-item"><img src="swim.jpg" alt="Photo 2" onerror="this.closest('.photo-strip-item').style.background='linear-gradient(135deg,#3d302822,#e8e4de)';this.style.display='none'"/></div>
+    <div class="photo-strip-item"><img src="dance1.jpg" alt="Photo 3" onerror="this.closest('.photo-strip-item').style.background='linear-gradient(135deg,#c8a84b33,#d4c9be)';this.style.display='none'"/></div>
+    <div class="photo-strip-item"><img src="dance3.jpg" alt="Photo 3" onerror="this.closest('.photo-strip-item').style.background='linear-gradient(135deg,#c8a84b33,#d4c9be)';this.style.display='none'"/></div>
+    <div class="photo-strip-item"><img src="draw.jpg" alt="Photo 4" onerror="this.closest('.photo-strip-item').style.background='linear-gradient(135deg,#5a453522,#e8e4de)';this.style.display='none'"/></div>
+    <div class="photo-strip-item"><img src="garba.jpg" alt="Photo 5" onerror="this.closest('.photo-strip-item').style.background='linear-gradient(135deg,#c8a84b44,#faf8f5)';this.style.display='none'"/></div>
+        <div class="photo-strip-item"><img src="dance2.jpg" alt="Photo 3" onerror="this.closest('.photo-strip-item').style.background='linear-gradient(135deg,#c8a84b33,#d4c9be)';this.style.display='none'"/></div>
+    <div class="photo-strip-item"><img src="food.jpg" alt="Photo 6" onerror="this.closest('.photo-strip-item').style.background='linear-gradient(135deg,#b89828,#e8e4de)';this.style.display='none'"/></div>
+  </div>
+</div>
+
+
+
 <!-- ABOUT -->
-<div class="alt-section" id="about">
+<div class="alt-section" >
   <div class="inner">
     <div class="section-eyebrow">// 01 — About</div>
     <h2 class="section-title reveal">Who I Am</h2>
@@ -706,6 +858,7 @@
         </div>
       </div>
       <div class="legends">
+     
         <div>
           <div class="ring-title work">Outer — Work</div>
           <div class="legend-items" id="workLegend"></div>
@@ -716,6 +869,13 @@
           <div class="legend-items" id="personalLegend"></div>
         </div>
       </div>
+         <p class="chart-description">
+      Outside of work, I love staying creative and active. I’m member of Swedesi Dance Group, where we mix Swedish and Bollywood styles, and I often unwind through painting or simply pushing myself to try something new  right now, I’m challenging myself to learn swimming..
+
+     <br> Of course, not every day is that productive — sometimes I’m just on the couch, watching dramas or diving into a full Shah Rukh Khan movie marathon..
+
+      <br>I have conversational Swedish skills (A2), am currently learning Dutch, and hold an EU driving license.
+    </p>
     </div>
 
     <p class="about-quote">"For me, growth isn't just a goal — it's <em>a way of life.</em>"</p>
@@ -736,6 +896,21 @@
       <div class="edu-year">2013 — 2017</div>
       <div class="edu-degree">Bachelor of Technology in Computer Science</div>
       <div class="edu-school">Amity University, Noida</div>
+    </div>
+    <div class="edu-card reveal">
+      <div class="edu-year">2024</div>
+      <div class="edu-degree">Microsoft Azure AI Fundamentals (AI-900)</div>
+      <div class="edu-school">Microsoft</div>
+    </div>
+    <div class="edu-card reveal">
+      <div class="edu-year">2021</div>
+      <div class="edu-degree">SAFe DevOps</div>
+      <div class="edu-school">Agile SAFe</div>
+    </div>
+    <div class="edu-card reveal">
+      <div class="edu-year">2021</div>
+      <div class="edu-degree">Microsoft Azure Fundamentals (AZ-900)</div>
+      <div class="edu-school">Microsoft</div>
     </div>
     <div class="edu-card reveal">
       <div class="edu-year">2023</div>
@@ -763,13 +938,16 @@
             <li>Led cross-functional data initiatives increasing operational efficiency by 25% across telecom platforms.</li>
             <li>Built and managed real-time reporting dashboards using Grafana and Power BI for executive stakeholders.</li>
             <li>Defined KPIs and translated business requirements into data-driven strategies for product teams.</li>
+            <li>Designed and developed data-driven solutions using Microsoft Power Platform (Power Apps & Power BI), enabling efficient reporting, analytics, and improved application performance </li>
+            <li>Designed and optimized data transformations within Databricks to support analytics and reporting use cases, improving query performance and data availability. </li>
+            <li>Built and maintained data models using DBT, improving data reliability, testing, and documentation across analytics workflows. </li>
           </ul>
         </div>
       </div>
       <div class="timeline-item">
         <div class="timeline-dot"></div>
         <div class="timeline-left">
-          <div class="timeline-period">2022 — 2024</div>
+          <div class="timeline-period">2022 — 2024 </div>
           <div class="timeline-company">Tech Mahindra, Sweden</div>
         </div>
         <div class="timeline-right">
@@ -778,13 +956,14 @@
             <li>Analyzed business requirements and designed new Microsoft Dynamics CRM pages and applications, reducing issue resolution time by 30%.</li>
             <li>Automated reporting workflows saving 15 hours/week and improving data accuracy by 40%.</li>
             <li>Collaborated with engineering and product teams to define data pipelines and business metrics.</li>
+            <li> Analyzed functional and non-functional requirements and raw data to design and deliver end-to-end analytics solutions utilizing Azure components (data ingestion, processing, and reporting). </li>
           </ul>
         </div>
       </div>
       <div class="timeline-item">
         <div class="timeline-dot"></div>
         <div class="timeline-left">
-          <div class="timeline-period">2018 — 2022</div>
+          <div class="timeline-period">2018 — 2022 </div>
           <div class="timeline-company">Tech Mahindra, India</div>
         </div>
         <div class="timeline-right">
@@ -815,21 +994,40 @@
     <div class="skill-category reveal">
       <div class="skill-cat-title">Analytics &amp; BI</div>
       <div class="skill-tags">
-        <span class="tag">Power BI</span><span class="tag">Looker</span>
+        <span class="tag">Power BI</span><span class="tag">Statistical Analysis</span>
+        <span class="tag">KPI Design</span>
         <span class="tag">Google Analytics</span><span class="tag">A/B Testing</span>
+      </div>
+    </div>
+    <div class="skill-category reveal">
+      <div class="skill-cat-title">Business Analysis</div>
+      <div class="skill-tags">
+        <span class="tag">Requirements Gathering</span><span class="tag">Stakeholder Management</span>
+        <span class="tag">User Stories</span>
+        <span class="tag">UAT</span><span class="tag">Gap Analysis</span>
+        <span class="tag">Power Apps</span><span class="tag">CRM</span>
       </div>
     </div>
     <div class="skill-category reveal">
       <div class="skill-cat-title">Process Modeling</div>
       <div class="skill-tags">
-        <span class="tag">BPMN</span><span class="tag">UML</span>
+        <span class="tag">BPMN</span><span class="tag">UML</span><span class="tag">Figma</span>
+        <span class="tag">Process Mapping</span><span class="tag">Flowcharting</span>
+        <span class="tag">Lean</span><span class="tag">Six Sigma</span>
       </div>
     </div>
     <div class="skill-category reveal">
       <div class="skill-cat-title">Tools &amp; Platforms</div>
       <div class="skill-tags">
-        <span class="tag">AWS</span><span class="tag">Azure</span>
         <span class="tag">Jira</span><span class="tag">Confluence</span><span class="tag">Git</span>
+         <span class="tag">Miro</span><span class="tag">SharePoint</span>
+      </div>
+    </div>
+    <div class="skill-category reveal">
+      <div class="skill-cat-title">Cloud &amp; Data Platforms</div>
+      <div class="skill-tags">
+        <span class="tag">Azure</span><span class="tag">Data Factory</span>
+        <span class="tag">Databricks</span><span class="tag">Synapse</span><span class="tag">Data Lake</span>
       </div>
     </div>
   </div>
@@ -942,7 +1140,8 @@
           <label>Message</label>
           <textarea placeholder="Tell me about your project..."></textarea>
         </div>
-        <button type="submit" class="btn btn-primary" style="width:fit-content;">Send Message</button>
+        <button class="btn btn-outline" >
+        <a href="mailto:jinni.girhotra@gmail.com"  >Send Message </button>
       </form>
     </div>
   </div>
@@ -1030,7 +1229,67 @@
     return `M${p1.x} ${p1.y} A${R} ${R} 0 ${lg} 1 ${p2.x} ${p2.y} L${p3.x} ${p3.y} A${r} ${r} 0 ${lg} 0 ${p4.x} ${p4.y}Z`;
   }
 
-  function buildRing(data, R, r, legendEl, animDelay) {
+function buildRing(data, R, r, legendEl, animDelay) {
+  const total = data.reduce((s, d) => s + d.pct, 0);
+  const maxP = Math.max(...data.map(d => d.pct));
+  let angle = -Math.PI / 2;
+  data.forEach((d, i) => {
+    const sweep = (d.pct / total) * 2 * Math.PI - gap * 2;
+    const start = angle + gap, end = start + sweep;
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', arc(R, r, start, end));
+    path.setAttribute('fill', d.color);
+    path.classList.add('segment');
+    path.style.opacity = '0';
+    path.style.transition = `opacity 0.5s ${animDelay + i * 0.1}s`;
+    path.addEventListener('mouseenter', e => {
+      tooltip.innerHTML = `<strong>${d.emoji} ${d.name}</strong><br/>${d.desc}<br/>${d.pct}%`;
+      tooltip.style.opacity = '1'; moveTip(e);
+    });
+    path.addEventListener('mousemove', moveTip);
+    path.addEventListener('mouseleave', () => tooltip.style.opacity = '0');
+    svg.appendChild(path);
+
+    path._showFn = () => {
+      setTimeout(() => { path.style.opacity = '1'; }, (animDelay + i * 0.1) * 1000);
+    };
+
+    angle += (d.pct / total) * 2 * Math.PI;
+
+    const item = document.createElement('div');
+    item.className = 'legend-item';
+    item.style.opacity = '0';
+    item.style.transform = 'translateX(-12px)';
+    item.style.transition = `opacity 0.4s ${animDelay + 0.5 + i * 0.08}s, transform 0.4s ${animDelay + 0.5 + i * 0.08}s`;
+    item.innerHTML = `<span class="legend-emoji">${d.emoji}</span><div class="legend-dot" style="background:${d.color}"></div><div class="legend-info"><div class="legend-name">${d.name}</div><div class="legend-bar-bg"><div class="legend-bar-fill" style="background:${d.color};width:${d.pct/maxP*100}%;animation-delay:${animDelay+0.3+i*0.07}s"></div></div></div><span class="legend-pct">${d.pct}%</span>`;
+    item.addEventListener('mouseenter', () => path.style.filter = 'brightness(1.18) drop-shadow(0 0 6px rgba(200,168,75,0.4))');
+    item.addEventListener('mouseleave', () => path.style.filter = '');
+    legendEl.appendChild(item);
+    item._showFn = () => {
+      setTimeout(() => { item.style.opacity = '1'; item.style.transform = 'translateX(0)'; }, (animDelay + 0.5 + i * 0.08) * 1000);
+    };
+  });
+}
+
+buildRing(work, outerR, outerr, document.getElementById('workLegend'), 0);
+buildRing(personal, innerR, innerr, document.getElementById('personalLegend'), 0.4);
+
+// Trigger chart animation on scroll into view
+let chartAnimated = false;
+const chartObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !chartAnimated) {
+      chartAnimated = true;
+      svg.classList.add('spin-in');
+      document.querySelectorAll('.segment').forEach(p => p._showFn && p._showFn());
+      document.querySelectorAll('.legend-item').forEach(li => li._showFn && li._showFn());
+    }
+  });
+}, { threshold: 0.3 });
+chartObserver.observe(document.querySelector('.donut-container'));
+
+
+  /*function buildRing(data, R, r, legendEl, animDelay) {
     const total = data.reduce((s, d) => s + d.pct, 0);
     const maxP = Math.max(...data.map(d => d.pct));
     let angle = -Math.PI / 2;
@@ -1061,7 +1320,7 @@
 
   buildRing(work, outerR, outerr, document.getElementById('workLegend'), 0);
   buildRing(personal, innerR, innerr, document.getElementById('personalLegend'), 0.4);
-
+*/
   const sep = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
   sep.setAttribute('cx', cx); sep.setAttribute('cy', cy);
   sep.setAttribute('r', (outerr + innerR) / 2);
